@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -58,7 +58,7 @@ test("share page loads subtitles only from the player subtitle menu", () => {
 
 test("used share page shows the supplied illustration and concise message", () => {
   assert.match(sharePageSource, /share-link-used\.webp/);
-  assert.match(sharePageSource, /当前链接已失效/);
+  assert.match(sharePageSource, /t\("share\.linkExpired"\)/);
   assert.match(sharePageSource, /share-page__state--bare/);
   assert.doesNotMatch(sharePageSource, /<Link2Off|这个一次性链接已被使用/);
 });
@@ -74,7 +74,7 @@ test("share loading state only shows an unframed spinner", () => {
 test("share load error has no outer frame or network hint", () => {
   assert.match(
     sharePageSource,
-    /loadState === "error"[\s\S]*?share-page__state--bare[\s\S]*?src=\{linkUsedImage\}[\s\S]*?暂时无法加载/
+    /loadState === "error"[\s\S]*?share-page__state--bare[\s\S]*?src=\{linkUsedImage\}[\s\S]*?t\("share\.loadFailed"\)/
   );
   assert.doesNotMatch(sharePageSource, /网络连接可能不稳定/);
   assert.doesNotMatch(sharePageSource, /重新加载/);
@@ -116,27 +116,28 @@ test("share header logo aligns with the video content and clears the safe area",
   );
 });
 
-test("the share footer text links to the project repository", () => {
+test("the share footer shows the product brand", () => {
   assert.match(
     sharePageSource,
-    /href="https:\/\/github\.com\/nianzhibai\/91"[\s\S]*?>\s*© \{new Date\(\)\.getFullYear\(\)\} 91\s*<\/a>/
+    /<span>© \{new Date\(\)\.getFullYear\(\)\} 91Play<\/span>/
   );
+  assert.doesNotMatch(sharePageSource, /github\.com\/nianzhibai\/91/);
   assert.match(
     shareStylesSource,
-    /\.share-page__footer a\s*\{[\s\S]*?display:\s*inline-block;/
+    /\.share-page__footer span\s*\{[\s\S]*?display:\s*inline-block;/
   );
   assert.doesNotMatch(
     shareStylesSource,
-    /\.share-page__footer a\s*\{[^}]*width:\s*100%;/
+    /\.share-page__footer span\s*\{[^}]*width:\s*100%;/
   );
 });
 
 test("share creation copies a newly generated one-time URL", () => {
   assert.match(actionsSource, /createAndCopyVideoShare\(video\.id\)/);
   assert.match(shareClipboardSource, /createVideoShare\(videoID\)/);
-  assert.match(actionsSource, /生成并复制一次性分享链接/);
+  assert.match(actionsSource, /t\("actions\.copyShare"\)/);
   assert.match(actionsSource, /<Share2 size=\{16\} \/>/);
-  assert.match(actionsSource, /:\s*"分享"\}/);
+  assert.match(actionsSource, /:\s*t\("actions\.share"\)\}/);
   assert.doesNotMatch(actionsSource, /:\s*"一次性分享"\}/);
   assert.match(shareClipboardSource, /navigator\.clipboard\?\.writeText/);
   assert.match(shareClipboardSource, /document\.execCommand\("copy"\)/);
@@ -150,7 +151,7 @@ test("successful mobile share shows a bottom-right confirmation toast", () => {
   );
   assert.match(
     actionsSource,
-    /shareState === "copied"[\s\S]*?"已复制一次性分享链接"[\s\S]*?"请再次点击分享按钮"/
+    /shareState === "copied"[\s\S]*?t\("actions\.shareToastCopied"\)[\s\S]*?t\("actions\.clickAgainShare"\)/
   );
   assert.doesNotMatch(
     actionsSource,

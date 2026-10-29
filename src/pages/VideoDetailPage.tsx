@@ -27,6 +27,7 @@ import {
   updateVideoTags,
 } from "@/data/videos";
 import { useAuth } from "@/admin/AuthContext";
+import { useI18n } from "@/lib/i18n";
 import { useDocumentScrollLock } from "@/lib/useDocumentScrollLock";
 import { resolveVideoReturnPath } from "@/lib/videoReturnPath";
 import { scrollPageTo, usePageScrollRoot } from "@/lib/pageScroll";
@@ -116,6 +117,7 @@ function VideoDetailContent({ id }: { id?: string }) {
   // restart detail loading or reset the document scroll position.
   const [entryNavigationType] = useState(navigationType);
   const { isAdmin } = useAuth();
+  const { t } = useI18n();
   const locationState = location.state as { from?: unknown } | null;
   const [initialSnapshot] = useState<VideoDetailSnapshot | null>(() =>
     id ? readCachedVideoDetail(id) : null
@@ -163,7 +165,7 @@ function VideoDetailContent({ id }: { id?: string }) {
     if (!id) {
       setLoading(false);
       setDetailError("");
-      document.title = "视频不存在";
+      document.title = t("detail.notFound");
       return;
     }
     let active = true;
@@ -206,13 +208,13 @@ function VideoDetailContent({ id }: { id?: string }) {
         setDetail(stableDetail);
         setDetailError("");
         setLoading(false);
-        document.title = stableDetail ? stableDetail.title : "视频不存在";
+        document.title = stableDetail ? stableDetail.title : t("detail.notFound");
       })
       .catch(() => {
         if (!active) return;
         // Preserve a cached detail during a transient outage. Without a cache,
         // show a retryable failure state instead of claiming the video is gone.
-        setDetailError("视频信息暂时无法加载，请稍后重试");
+        setDetailError(t("detail.loadFailed"));
         setLoading(false);
         if (!initialSnapshot) document.title = "视频加载失败";
       });
@@ -264,7 +266,7 @@ function VideoDetailContent({ id }: { id?: string }) {
           active &&
           !(error instanceof DOMException && error.name === "AbortError")
         ) {
-          setRecommendationsError("推荐视频加载失败，请稍后重试");
+          setRecommendationsError(t("detail.recommendFailed"));
         }
       })
       .finally(() => {
@@ -300,7 +302,7 @@ function VideoDetailContent({ id }: { id?: string }) {
         if (active) setAvailableTags(tagList);
       })
       .catch(() => {
-        if (active) setAvailableTagsError("标签加载失败，请稍后重试");
+        if (active) setAvailableTagsError(t("detail.tagsFailed"));
       })
       .finally(() => {
         if (active) setAvailableTagsLoading(false);
@@ -379,8 +381,8 @@ function VideoDetailContent({ id }: { id?: string }) {
     } catch {
       setDeleteError(
         deleteSource
-          ? "删除失败，源文件未能删除，请检查WebDAV是否有删除权限"
-          : "删除失败，请稍后重试。"
+          ? t("detail.deleteFailedNoPerm")
+          : t("detail.deleteFailed")
       );
       setDeleteSaving(false);
     }
@@ -427,7 +429,7 @@ function VideoDetailContent({ id }: { id?: string }) {
           <div className="container vd-page__inner">
             <div className="vd-empty">
               <div>
-                {detailError || "视频不存在或已被移除"}
+                {detailError || t("detail.notFoundOrRemoved")}
               </div>
               {detailError && (
                 <button
@@ -435,7 +437,7 @@ function VideoDetailContent({ id }: { id?: string }) {
                   type="button"
                   onClick={() => setDetailLoadVersion((version) => version + 1)}
                 >
-                  重试
+                  {t("detail.retry")}
                 </button>
               )}
             </div>

@@ -28,6 +28,7 @@ import {
   type HomeFeedKey,
 } from "@/lib/listingSearchParams";
 import { MOBILE_VIDEO_PAGE_SIZE, useIsMobile } from "@/lib/responsive";
+import { useI18n } from "@/lib/i18n";
 import { useRouteActivity } from "@/lib/routeActivity";
 import { useInfiniteListing } from "@/lib/useInfiniteListing";
 import {
@@ -45,6 +46,7 @@ export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const routeActive = useRouteActivity();
+  const { t } = useI18n();
   const activeSearchQuery = searchParams.get("q")?.trim() ?? "";
   const activeTag = searchParams.get("tag")?.trim() ?? "";
   const hasActiveSearch = activeSearchQuery.length > 0;
@@ -106,11 +108,11 @@ export default function HomePage() {
 
   useEffect(() => {
     document.title = activeSearchQuery
-      ? `搜索 "${activeSearchQuery}"`
+      ? `${t("home.searchPrefix")} "${activeSearchQuery}"`
       : activeTag
-      ? `标签 ${activeTag}`
-      : "首页";
-  }, [activeSearchQuery, activeTag]);
+      ? `${t("home.tagPrefix")} ${activeTag}`
+      : t("home.title");
+  }, [activeSearchQuery, activeTag, t]);
 
   useEffect(() => {
     // 无限滚动没有页码；清理旧书签或外部链接遗留的 page 参数。
@@ -209,7 +211,7 @@ export default function HomePage() {
         ) : !feedHasContent ? (
           <AdminEmptyVisual
             variant={hasActiveFilter ? "no-results" : "empty"}
-            text={hasActiveFilter ? "未查询到" : "当前库中没有视频"}
+            text={hasActiveFilter ? t("home.emptyFiltered") : t("home.empty")}
             className="admin-empty-state admin-empty-state--plain home-empty-state"
           />
         ) : (
@@ -248,8 +250,8 @@ export default function HomePage() {
           className={`home-refresh ${refreshing ? "is-refreshing" : ""}`}
           onClick={refreshHome}
           disabled={refreshing}
-          aria-label="刷新首页"
-          title="刷新首页"
+          aria-label={t("home.refresh")}
+          title={t("home.refresh")}
         >
           <RefreshCw size={18} />
         </button>

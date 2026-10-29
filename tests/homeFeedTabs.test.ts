@@ -52,7 +52,7 @@ test("the active home tab lives in the URL so history can restore it", () => {
 test("the home tabs are an accessible tab list with the random feed first", () => {
   assert.match(
     tabsSource,
-    /\{ key: "recommend", label: "随机推荐" \},\s*\{ key: "latest", label: "最新视频" \}/
+    /\{ key: "recommend", label: "home.recommend" \},\s*\{ key: "latest", label: "home.latest" \}/
   );
   assert.match(tabsSource, /role="tablist"/);
   assert.match(tabsSource, /role="tab"/);

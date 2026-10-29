@@ -4,6 +4,7 @@ import linkUsedImage from "@/assets/share-link-used.webp";
 import { VideoInfoPanel } from "@/components/VideoInfoPanel";
 import { VideoMetaHeader } from "@/components/VideoMetaHeader";
 import { VideoPlayer } from "@/components/VideoPlayer";
+import { useI18n } from "@/lib/i18n";
 import {
   consumeVideoShare,
   fetchSharedVideoSubtitles,
@@ -16,6 +17,7 @@ type LoadState = "loading" | "ready" | "unavailable" | "error";
 
 export default function SharedVideoPage() {
   const location = useLocation();
+  const { t } = useI18n();
   const token = location.hash.startsWith("#") ? location.hash.slice(1) : "";
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [claim, setClaim] = useState<VideoShareClaim | null>(null);
@@ -76,7 +78,7 @@ export default function SharedVideoPage() {
     <div className="share-page">
       <header className="share-page__header">
         <div className="container share-page__header-inner">
-          <div className="share-page__brand" aria-label="91">
+          <div className="share-page__brand" aria-label="91Play">
             <img src="/icon.png" alt="" />
           </div>
         </div>
@@ -95,7 +97,7 @@ export default function SharedVideoPage() {
           <div
             className="share-page__state share-page__state--bare"
             aria-busy="true"
-            aria-label="正在加载"
+            aria-label={t("share.loading")}
           >
             <span className="share-page__spinner" aria-hidden="true" />
           </div>
@@ -112,7 +114,7 @@ export default function SharedVideoPage() {
               alt=""
               aria-hidden="true"
             />
-            <p className="share-page__state-message">当前链接已失效</p>
+            <p className="share-page__state-message">{t("share.linkExpired")}</p>
           </div>
         )}
 
@@ -127,7 +129,7 @@ export default function SharedVideoPage() {
               alt=""
               aria-hidden="true"
             />
-            <h1>暂时无法加载</h1>
+            <h1>{t("share.loadFailed")}</h1>
           </div>
         )}
 
@@ -147,7 +149,7 @@ export default function SharedVideoPage() {
               </div>
             </div>
 
-            <section className="vd-summary" aria-label="分享的视频">
+            <section className="vd-summary" aria-label={t("share.ariaVideo")}>
               <VideoMetaHeader video={claim.video} />
             </section>
 
@@ -157,13 +159,7 @@ export default function SharedVideoPage() {
       </main>
 
       <footer className="share-page__footer">
-        <a
-          href="https://github.com/nianzhibai/91"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          © {new Date().getFullYear()} 91
-        </a>
+        <span>© {new Date().getFullYear()} 91Play</span>
       </footer>
     </div>
   );

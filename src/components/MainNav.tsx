@@ -7,6 +7,8 @@ import {
 import { useAuth } from "@/admin/AuthContext";
 import { UploadIcon } from "@/components/icons/UploadIcon";
 import { VideoIcon } from "@/components/icons/VideoIcon";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/lib/i18n";
 
 // Font Awesome Free 7.3.1 by Fonticons, Inc. — https://fontawesome.com/license/free
 function ShortVideoIcon({ size = 16 }: { size?: number }) {
@@ -66,18 +68,19 @@ function MobileMenuIcon({ size = 26 }: { size?: number }) {
 }
 
 const navItems = [
-  { to: "/shorts", label: "短视频", icon: ShortVideoIcon },
-  { to: "/list", label: "视频", icon: VideoIcon },
+  { to: "/shorts", label: "nav.shorts", icon: ShortVideoIcon },
+  { to: "/list", label: "nav.videos", icon: VideoIcon },
 ];
 
-const uploadNavItem = { to: "/upload", label: "上传", icon: UploadIcon };
-const adminNavItem = { to: "/admin", label: "后台", icon: AdminIcon };
+const uploadNavItem = { to: "/upload", label: "nav.upload", icon: UploadIcon };
+const adminNavItem = { to: "/admin", label: "nav.admin", icon: AdminIcon };
 
 export function MainNav() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLUListElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const { status, isAdmin, logout } = useAuth();
+  const { t } = useI18n();
 
   const items = isAdmin ? [...navItems, uploadNavItem, adminNavItem] : navItems;
 
@@ -145,7 +148,7 @@ export function MainNav() {
                 }}
               >
                 <Icon size={16} />
-                {label}
+                {t(label)}
               </NavLink>
             </li>
           ))}
@@ -157,16 +160,19 @@ export function MainNav() {
                 onClick={handleLogout}
               >
                 <LogOut size={16} />
-                退出
+                {t("nav.logout")}
               </button>
             </li>
           )}
+          <li role="none">
+            <LanguageSwitcher />
+          </li>
         </ul>
 
         <button
           ref={toggleRef}
           className="main-nav__toggle"
-          aria-label={open ? "关闭菜单" : "打开菜单"}
+          aria-label={open ? t("nav.closeMenu") : t("nav.openMenu")}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >

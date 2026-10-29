@@ -86,7 +86,7 @@ test("detail playback actions only expose delete as the management action", () =
   assert.doesNotMatch(actionsSource, /onHideVideo/);
   assert.doesNotMatch(actionsSource, /hideSaving/);
   assert.doesNotMatch(actionsSource, /vd-actions__hide/);
-  assert.match(actionsSource, /aria-label="删除这个视频"/);
+  assert.match(actionsSource, /aria-label=\{t\("actions\.deleteVideo"\)\}/);
   assert.doesNotMatch(detailPageSource, /hideVideo/);
   assert.doesNotMatch(detailPageSource, /handleHideVideo/);
   assert.doesNotMatch(detailPageSource, /onHideVideo/);
@@ -162,7 +162,7 @@ test("detail history navigation renders cached content before background refresh
   );
   assert.match(
     detailPageSource,
-    /\.catch\(\(\) => \{[\s\S]*?setDetailError\("视频信息暂时无法加载，请稍后重试"\);[\s\S]*?setLoading\(false\)/
+    /\.catch\(\(\) => \{[\s\S]*?setDetailError\(t\("detail\.loadFailed"\)\);[\s\S]*?setLoading\(false\)/
   );
   assert.match(
     detailPageSource,

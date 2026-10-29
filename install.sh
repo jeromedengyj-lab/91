@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-APP_NAME="${APP_NAME:-video-site-91}"
-GITHUB_REPO="${GITHUB_REPO:-nianzhibai/91}"
-INSTALL_PATH="${INSTALL_PATH:-/opt/video-site-91}"
-SERVICE_NAME="${SERVICE_NAME:-video-site-91}"
+APP_NAME="${APP_NAME:-91play}"
+GITHUB_REPO="${GITHUB_REPO:-jeromedengyj-lab/91play}"
+INSTALL_PATH="${INSTALL_PATH:-/opt/91play}"
+SERVICE_NAME="${SERVICE_NAME:-91play}"
 FRONTEND_PORT_WAS_SET="${FRONTEND_PORT+x}"
 FRONTEND_PORT="${FRONTEND_PORT:-9191}"
 VERSION="${VERSION:-latest}"
@@ -19,7 +19,7 @@ VIDEO_SITE_SKIP_SELF_UPDATE="${VIDEO_SITE_SKIP_SELF_UPDATE:-0}"
 SERVICE_READY_TIMEOUT="${SERVICE_READY_TIMEOUT:-90}"
 VERSION_FILE="$INSTALL_PATH/.version"
 MANAGER_PATH="/usr/local/sbin/${APP_NAME}-manager"
-COMMAND_LINK="/usr/local/bin/91"
+COMMAND_LINK="/usr/local/bin/91play"
 APP_COMMAND_LINK="/usr/local/bin/${APP_NAME}"
 
 RED='\033[1;31m'

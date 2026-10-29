@@ -1,5 +1,6 @@
 import { memo } from "react";
 import type { HomeFeedKey } from "@/lib/listingSearchParams";
+import { useI18n } from "@/lib/i18n";
 
 type Props = {
   feed: HomeFeedKey;
@@ -7,13 +8,14 @@ type Props = {
 };
 
 const HOME_FEED_TABS: { key: HomeFeedKey; label: string }[] = [
-  { key: "recommend", label: "随机推荐" },
-  { key: "latest", label: "最新视频" },
+  { key: "recommend", label: "home.recommend" },
+  { key: "latest", label: "home.latest" },
 ];
 
 export const HomeFeedTabs = memo(function HomeFeedTabs({ feed, onChange }: Props) {
+  const { t } = useI18n();
   return (
-    <div className="content-tabs home-feed-tabs" role="tablist" aria-label="首页视频">
+    <div className="content-tabs home-feed-tabs" role="tablist" aria-label={t("home.aria")}>
       {HOME_FEED_TABS.map((tab) => {
         const active = tab.key === feed;
         return (
@@ -25,7 +27,7 @@ export const HomeFeedTabs = memo(function HomeFeedTabs({ feed, onChange }: Props
             className="content-tabs__tab home-feed-tabs__tab"
             onClick={() => onChange(tab.key)}
           >
-            {tab.label}
+            {t(tab.label)}
           </button>
         );
       })}

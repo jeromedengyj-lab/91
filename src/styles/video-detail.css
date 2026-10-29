@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
  * Video Detail Page
  * ---------------------------------------------------------
  * 整体视觉
@@ -3131,13 +3131,13 @@
   text-align: center;
 }
 
-.share-page__footer a {
+.share-page__footer span {
   display: inline-block;
   color: inherit;
   font-weight: var(--weight-semibold);
 }
 
-.share-page__footer a:hover {
+.share-page__footer span:hover {
   color: var(--accent);
 }
 

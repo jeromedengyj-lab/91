@@ -1,4 +1,4 @@
-## 快速开始
+﻿## 快速开始
 
 依赖：**Go 1.23+**、**ffmpeg / ffprobe**（用于封面、预览视频、媒体探测/转码和内容级去重，必装；路径可在配置里改）。`sampled_sha256` 指纹由 Go 直接读取 Range 字节计算，不依赖 ffmpeg。SQLite 用纯 Go 驱动（modernc），无需系统库；依赖已 vendored，可离线构建。跑爬虫需要 `python3`。
 
@@ -18,7 +18,7 @@ go build -o server ./cmd/server
 仓库根目录是前端（Vite + React），`backend/` 是本文档描述的 Go 服务：
 
 ```
-91/
+91play/
   src/                      前端源码：admin/ 管理后台、pages/、components/、lib/、styles/
   tests/                    前端测试（node --test）
   index.html  public/       前端入口与静态资源
@@ -360,7 +360,7 @@ flowchart LR
 
 管理员凭据仅存储在 SQLite 的 `users` 表，密码保存为 bcrypt 哈希；`config.yaml` 不再支持 `server.admin`。首次设置只写数据库，初始化标记和账号在同一事务中保存，删除或封禁管理员不会重新开放首次设置。升级时，只有尚未初始化且没有用户的数据库会导入旧配置中的非默认管理员凭据；已有数据库账号和密码始终优先，迁移成功后自动移除旧配置字段。旧版不关联用户的登录会话会失效，需要重新登录。
 
-忘记密码时可在线执行 `server reset-password`，选择已有用户 ID；也可用 `server reset-password --user-id 1` 指定目标。一键安装对应 `sudo 91 reset-password`，Docker 对应 `docker exec -it video-site-91 /opt/video-site-91/server reset-password`。必须使用包含该子命令的新版服务端；命令不停止或重启服务。
+忘记密码时可在线执行 `server reset-password`，选择已有用户 ID；也可用 `server reset-password --user-id 1` 指定目标。一键安装对应 `sudo 91play reset-password`，Docker 对应 `docker exec -it 91play /opt/91play/server reset-password`。必须使用包含该子命令的新版服务端；命令不停止或重启服务。
 
 重置命令使用安全随机源生成固定 12 位密码，保证同时包含大写字母、小写字母和数字；数据库提交成功后才在终端显示，数据库只存 bcrypt 哈希。改密和撤销目标用户所有旧会话在同一事务中完成，不创建账号、不修改角色或账号封禁、不解除 IP 封禁或清除失败计数。登录后仍可在后台手动修改密码，不强制二次改密。
 
@@ -376,6 +376,6 @@ flowchart LR
 
 - 一键脚本部署（systemd）：前端静态资源、API 与媒体路由由同一个
   `video-site-backend` 服务提供，日志用 `journalctl -u video-site-backend`；
-  `start.sh` 模式日志在 `$LOG_DIR`（默认 `/tmp/video-site-91/`）。
+  `start.sh` 模式日志在 `$LOG_DIR`（默认 `/tmp/91play/`）。
 - 后端日志按模块带前缀，直接 grep：`[scanner]`、`[scriptcrawler]`、`[nightly]`、`[dedupe-maintenance]` 等。爬虫 Python 子进程的输出并入后端日志。
 - 常见排查入口：网盘异常看后台网盘页的健康状态与 `lastError`；预览/封面卡住多半是上游限流，等冷却期过或看 `[nightly]` 是否在等队列排空；去重删了什么搜 `duplicate deleted`，内容匹配过程搜 `content duplicate matched`。

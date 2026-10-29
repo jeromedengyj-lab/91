@@ -1,9 +1,13 @@
 <p align="center">
-  <img width="120" height="120" alt="91" src="https://github.com/user-attachments/assets/5b323c94-bbd3-4dce-bbc8-adc86935b7de" />
+  <img width="120" height="120" alt="91Play" src="https://github.com/user-attachments/assets/5b323c94-bbd3-4dce-bbc8-adc86935b7de" />
 </p>
 
 <p align="center">
-  😄 个人私有视频站 😄
+  🚀 91Play — 个人私有视频站 · Personal Private Video Site 🚀
+</p>
+
+<p align="center">
+  支持中 / 英双语界面切换 · UI available in Chinese &amp; English
 </p>
 
 ## 功能特性
@@ -12,6 +16,7 @@
 - **低带宽播放** — 115、PikPak、123网盘、联通网盘、光鸭网盘、OneDrive 支持302模式，播放视频不消耗带宽
 - **短视频模式** — 一键切换抖音风格，沉浸刷片
 - **视频分享** — 视频支持一次性分享，"看完即焚"
+- **多语言界面** — 导航栏一键切换 中文 / English，语言偏好本地保存
 - **爬虫脚本** — 支持导入自定义脚本，但是有一些规范，具体可以参考 [SpiderFor91](https://github.com/Just-Spider/SpiderFor91)
 
 ## 预览图
@@ -25,29 +30,29 @@
 
 ```bash
 sudo apt update && sudo apt install -y curl ca-certificates
-curl -fsSL https://raw.githubusercontent.com/nianzhibai/91/main/install.sh -o install.sh
+curl -fsSL https://raw.githubusercontent.com/jeromedengyj-lab/91play/main/install.sh -o install.sh
 sudo bash install.sh
 ```
 部署完成后访问：`http://服务器IP:9191/`
 
-安装后自动注册 `91` 管理命令：
+安装后自动注册 `91play` 管理命令：
 ```bash
-91                  # 打开管理菜单
-91 stop             # 停止服务
-91 restart          # 重启服务
-91 update           # 更新到最新版本
-91 status           # 查看运行状态
-91 reset-password   # 重置密码
+91play                  # 打开管理菜单
+91play stop             # 停止服务
+91play restart          # 重启服务
+91play update           # 更新到最新版本
+91play status           # 查看运行状态
+91play reset-password   # 重置密码
 ```
 ### 方式二：Docker Compose 部署
 
 **1. 准备目录**
 ```bash
-mkdir video-site-91 && cd video-site-91
+mkdir 91play && cd 91play
 ```
 **2. 拉取仓库内置`docker-compose.yml`**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nianzhibai/91/main/docker-compose.yml -o docker-compose.yml
+curl -fsSL https://raw.githubusercontent.com/jeromedengyj-lab/91play/main/docker-compose.yml -o docker-compose.yml
 ```
 **3. 启动**
 ```bash
@@ -56,7 +61,7 @@ docker compose up -d
 **常用命令：**
 ```bash
 docker compose pull && docker compose up -d             # 更新并重启
-docker exec -it video-site-91 ./server reset-password   # 重置密码
+docker exec -it 91play ./server reset-password          # 重置密码
 docker compose logs -f                                  # 查看日志
 ```
 
@@ -64,7 +69,7 @@ docker compose logs -f                                  # 查看日志
 
 以下路径均相对于部署目录：
 
-- 一键脚本部署目录：默认 `/opt/video-site-91/`
+- 一键脚本部署目录：默认 `/opt/91play/`
 - Docker Compose 部署目录：默认 `docker-compose.yml` 所在目录
 
 | 内容 | 一键脚本部署 | Docker Compose 部署 |
@@ -110,18 +115,3 @@ docker compose logs -f                                  # 查看日志
 - [Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center) — 参考其页面设计
 - [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) — 当前项目使用的视频播放器
 - [OpenList](https://github.com/OpenListTeam/OpenList) — 参考其网盘接口
-
-## 捐赠
-
-如果这个项目对你有帮助，欢迎请我喝杯咖啡
-
-<table>
-  <tr>
-    <td width="50%"><img src="ReadMeImage/donate-wechat.webp" alt="微信" width="100%" /></td>
-    <td width="50%"><img src="ReadMeImage/donate-alipay.webp" alt="支付宝" width="100%" /></td>
-  </tr>
-  <tr>
-    <td align="center">微信</td>
-    <td align="center">支付宝</td>
-  </tr>
-</table>

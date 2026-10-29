@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -74,7 +74,7 @@ test("short video navigation uses the supplied Font Awesome icon", () => {
   assert.match(mainNavSource, /viewBox="0 0 448 512"/);
   assert.match(mainNavSource, /fill="currentColor"/);
   assert.match(mainNavSource, /M448\.5 209\.9c-44 \.1-87-13\.6-122\.8-39\.2/);
-  assert.match(mainNavSource, /\{ to: "\/shorts", label: "短视频", icon: ShortVideoIcon \}/);
+  assert.match(mainNavSource, /\{ to: "\/shorts", label: "nav.shorts", icon: ShortVideoIcon \}/);
 });
 
 test("public and admin video navigation share the supplied Font Awesome icon", () => {
@@ -85,7 +85,7 @@ test("public and admin video navigation share the supplied Font Awesome icon", (
   assert.match(videoIconSource, /export function VideoIcon/);
   assert.match(videoIconSource, /viewBox="0 0 576 512"/);
   assert.match(videoIconSource, /M549\.7 124\.1C543\.5 100\.4 524\.9 81\.8 501\.4 75\.5/);
-  assert.match(mainNavSource, /\{ to: "\/list", label: "视频", icon: VideoIcon \}/);
+  assert.match(mainNavSource, /\{ to: "\/list", label: "nav.videos", icon: VideoIcon \}/);
   assert.match(adminLayoutSource, /<VideoIcon size=\{15\} \/>/);
 });
 
@@ -94,7 +94,7 @@ test("admin navigation uses the supplied Font Awesome icon", () => {
   assert.match(mainNavSource, /function AdminIcon/);
   assert.match(mainNavSource, /viewBox="0 0 512 512"/);
   assert.match(mainNavSource, /M195\.1 9\.5C198\.1-5\.3 211\.2-16 226\.4-16/);
-  assert.match(mainNavSource, /const adminNavItem = \{ to: "\/admin", label: "后台", icon: AdminIcon \}/);
+  assert.match(mainNavSource, /const adminNavItem = \{ to: "\/admin", label: "nav.admin", icon: AdminIcon \}/);
 });
 
 test("upload navigation uses the supplied Font Awesome Pro icon", () => {
@@ -103,7 +103,7 @@ test("upload navigation uses the supplied Font Awesome Pro icon", () => {
   assert.match(uploadIconSource, /commercial license: https:\/\/fontawesome\.com\/license/);
   assert.match(uploadIconSource, /export function UploadIcon/);
   assert.match(uploadIconSource, /M512 384c0 35\.3-28\.7 64-64 64L64 448/);
-  assert.match(mainNavSource, /const uploadNavItem = \{ to: "\/upload", label: "上传", icon: UploadIcon \}/);
+  assert.match(mainNavSource, /const uploadNavItem = \{ to: "\/upload", label: "nav.upload", icon: UploadIcon \}/);
 });
 
 test("mobile navigation toggle uses the supplied Font Awesome Pro menu icon", () => {

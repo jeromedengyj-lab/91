@@ -11,6 +11,7 @@ import { TagCloud } from "@/components/TagCloud";
 import { VideoGrid } from "@/components/VideoGrid";
 import { VirtualVideoGrid } from "@/components/VirtualVideoGrid";
 import { listingFeedSource } from "@/lib/infiniteFeedSource";
+import { useI18n } from "@/lib/i18n";
 import {
   readListingSort,
   readListingView,
@@ -36,6 +37,7 @@ export default function ListingPage() {
   const [params, setParams] = useSearchParams();
   const location = useLocation();
   const routeActive = useRouteActivity();
+  const { t } = useI18n();
   const keyword = params.get("q") ?? "";
   const tag = params.get("tag") ?? "";
   const sort = readListingSort(params);
@@ -78,11 +80,11 @@ export default function ListingPage() {
 
   useEffect(() => {
     document.title = keyword
-      ? `搜索 "${keyword}"`
+      ? `${t("listing.searchPrefix")} "${keyword}"`
       : tag
-      ? `标签 ${tag}`
-      : "视频列表";
-  }, [keyword, tag]);
+      ? `${t("listing.tagPrefix")} ${tag}`
+      : t("listing.title");
+  }, [keyword, tag, t]);
 
   // 无限滚动没有页码，旧链接里的 page 参数只会让 URL 与实际内容不符。
   useEffect(() => {

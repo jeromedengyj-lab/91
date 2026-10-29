@@ -433,7 +433,7 @@ function mountArtPlayer({
     shouldUseCompactPlayerSettings(mount, enableOrientationControl)
   );
   const option: Option = {
-    id: "91-detail-player",
+    id: "91play-detail-player",
     container: mount,
     url: "",
     poster,

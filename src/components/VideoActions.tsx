@@ -16,6 +16,7 @@ import {
   copyExistingVideoShareURL,
   createAndCopyVideoShare,
 } from "@/lib/videoShareClipboard";
+import { useI18n } from "@/lib/i18n";
 
 type Props = {
   video: VideoDetail;
@@ -48,6 +49,7 @@ export function VideoActions({
     "idle" | "creating" | "copy-ready" | "copied" | "error"
   >("idle");
   const visitId = useMemo(createVideoReactionVisitId, [video.id]);
+  const { t } = useI18n();
   const countsRef = useRef<VideoReactionCounts>({
     likes: video.likes ?? 0,
     dislikes: video.dislikes ?? 0,
@@ -212,11 +214,11 @@ export function VideoActions({
 
   return (
     <>
-      <div className="vd-actions" role="toolbar" aria-label="视频操作">
+      <div className="vd-actions" role="toolbar" aria-label={t("actions.video")}>
         <div
           className="vd-actions__group"
           role="group"
-          aria-label="点赞和点踩"
+          aria-label={t("actions.likeDislike")}
           aria-busy={reactionPending}
         >
           <button
@@ -227,7 +229,7 @@ export function VideoActions({
             onClick={() => handleReaction("like")}
             disabled={reactionPending}
             aria-pressed={reaction === "like"}
-            aria-label={reaction === "like" ? "取消点赞" : "点赞"}
+            aria-label={reaction === "like" ? t("actions.unlike") : t("actions.like")}
           >
             <ThumbsUp
               size={18}
@@ -243,7 +245,7 @@ export function VideoActions({
             onClick={() => handleReaction("dislike")}
             disabled={reactionPending}
             aria-pressed={reaction === "dislike"}
-            aria-label={reaction === "dislike" ? "取消点踩" : "点踩"}
+            aria-label={reaction === "dislike" ? t("actions.undislike") : t("actions.dislike")}
           >
             <ThumbsDown
               size={18}
@@ -262,23 +264,23 @@ export function VideoActions({
           disabled={shareState === "creating"}
           aria-label={
             pendingShareURL.current
-              ? "复制已生成的一次性分享链接"
-              : "生成并复制一次性分享链接"
+              ? t("actions.shareCopied")
+              : t("actions.copyShare")
           }
         >
           {shareState === "copied" ? <Check size={16} /> : <Share2 size={16} />}
           <span>
             {shareState === "creating"
-              ? "生成中"
+              ? t("actions.generating")
               : shareState === "copied"
-                ? "链接已复制"
+                ? t("actions.linkCopied")
                 : shareState === "copy-ready"
-                  ? "再次点击复制"
+                  ? t("actions.copyAgain")
                   : shareState === "error"
                     ? pendingShareURL.current
-                      ? "复制失败，重试"
-                      : "分享失败，重试"
-                    : "分享"}
+                      ? t("actions.copyRetry")
+                      : t("actions.shareRetry")
+                    : t("actions.share")}
           </span>
         </button>
 
@@ -288,10 +290,10 @@ export function VideoActions({
             className="vd-actions__btn vd-actions__delete"
             onClick={onDeleteVideo}
             disabled={deleteSaving}
-            aria-label="删除这个视频"
+            aria-label={t("actions.deleteVideo")}
           >
             <Trash2 size={16} />
-            <span>{deleteSaving ? "删除中" : "删除"}</span>
+            <span>{deleteSaving ? t("actions.deleting") : t("actions.delete")}</span>
           </button>
         )}
       </div>
@@ -305,8 +307,8 @@ export function VideoActions({
           >
             <span>
               {shareState === "copied"
-                ? "已复制一次性分享链接"
-                : "请再次点击分享按钮"}
+                ? t("actions.shareToastCopied")
+                : t("actions.clickAgainShare")}
             </span>
           </div>,
           document.body

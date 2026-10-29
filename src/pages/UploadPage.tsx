@@ -10,6 +10,7 @@ import { Link } from "react-router";
 import { Check, Link2, UploadCloud, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { SectionHeader } from "@/components/SectionHeader";
+import { useI18n } from "@/lib/i18n";
 import {
   cancelRemoteUpload,
   createRemoteUpload,
@@ -29,18 +30,19 @@ const ACTIVE_REMOTE_STATES = new Set<RemoteUploadState>([
   "saving",
 ]);
 const REMOTE_STATE_LABELS: Record<RemoteUploadState, string> = {
-  queued: "排队中",
-  downloading: "下载中",
-  validating: "校验中",
-  saving: "入库中",
-  completed: "已完成",
-  failed: "失败",
-  canceled: "已取消",
+  queued: "upload.queued",
+  downloading: "upload.downloading",
+  validating: "upload.validating",
+  saving: "upload.saving",
+  completed: "upload.completed",
+  failed: "upload.failed",
+  canceled: "upload.canceled",
 };
 
 type UploadMode = "local" | "remote";
 
 export default function UploadPage() {
+  const { t } = useI18n();
   const [mode, setMode] = useState<UploadMode>("local");
   const [file, setFile] = useState<File | null>(null);
   const [remoteURL, setRemoteURL] = useState("");
@@ -60,8 +62,8 @@ export default function UploadPage() {
   );
 
   useEffect(() => {
-    document.title = "上传视频";
-  }, []);
+    document.title = t("upload.title");
+  }, [t]);
 
   useEffect(() => {
     let active = true;
@@ -90,7 +92,7 @@ export default function UploadPage() {
       setJobsError("");
     } catch (refreshError) {
       setJobsError(
-        refreshError instanceof Error ? refreshError.message : "任务列表加载失败"
+        refreshError instanceof Error ? refreshError.message : t("upload.listLoadFailed")
       );
     } finally {
       setJobsLoading(false);
@@ -193,8 +195,8 @@ export default function UploadPage() {
         submitError instanceof Error
           ? submitError.message
           : mode === "remote"
-            ? "创建直链任务失败"
-            : "上传失败，请检查文件格式后重试"
+            ? t("upload.directLinkFailed")
+            : t("upload.uploadFailedInvalid")
       );
     } finally {
       setSaving(false);
@@ -212,7 +214,7 @@ export default function UploadPage() {
       void refreshJobs();
     } catch (cancelError) {
       setJobsError(
-        cancelError instanceof Error ? cancelError.message : "取消任务失败"
+        cancelError instanceof Error ? cancelError.message : t("upload.cancelFailed")
       );
     } finally {
       setCancelingIDs((current) => {
@@ -226,9 +228,9 @@ export default function UploadPage() {
   return (
     <AppShell>
       <div className="container page-section">
-        <SectionHeader title="上传视频" />
+        <SectionHeader title={t("upload.title")} />
         <form className="upload-panel" onSubmit={handleSubmit}>
-          <div className="upload-mode-switch" role="tablist" aria-label="上传方式">
+          <div className="upload-mode-switch" role="tablist" aria-label={t("upload.modeAria")}>
             <button
               type="button"
               role="tab"
@@ -344,11 +346,11 @@ export default function UploadPage() {
             >
               {saving
                 ? mode === "remote"
-                  ? "创建中"
-                  : "上传中"
+                  ? t("upload.creating")
+                  : t("upload.uploading")
                 : mode === "remote"
-                  ? "创建任务"
-                  : "上传"}
+                  ? t("upload.createTask")
+                  : t("upload.upload")}
             </button>
           </div>
         </form>
@@ -385,7 +387,7 @@ export default function UploadPage() {
                       <strong>{job.title || job.sourceLabel}</strong>
                       <span className="remote-upload-job__state">
                         {job.cancelRequested
-                          ? "正在取消"
+                          ? t("upload.canceling")
                           : REMOTE_STATE_LABELS[job.state]}
                       </span>
                     </div>
@@ -396,7 +398,7 @@ export default function UploadPage() {
                     ) : null}
                     <div className="remote-upload-job__meta">
                       <span className="remote-upload-job__progress-copy">
-                        {progressLabel(job, percent)}
+                        {progressLabel(job, percent, t)}
                       </span>
                       <time dateTime={job.createdAt}>
                         {formatJobTime(job.createdAt)}
@@ -464,18 +466,19 @@ function isValidRemoteVideoURL(value: string): boolean {
 
 function progressLabel(
   job: RemoteUploadJob,
-  percent: number | null
+  percent: number | null,
+  t: (key: string) => string
 ): string {
-  if (job.state === "queued") return "等待前序任务完成";
-  if (job.state === "validating") return "正在确认视频流与文件格式";
-  if (job.state === "saving") return "正在写入视频库并创建媒体任务";
-  if (job.state === "canceled") return "任务已取消，临时文件已清理";
+  if (job.state === "queued") return t("upload.waitingQueue");
+  if (job.state === "validating") return t("upload.validatingStream");
+  if (job.state === "saving") return t("upload.savingLibrary");
+  if (job.state === "canceled") return t("upload.canceledCleaned");
   if (job.state === "failed") return formatBytes(job.bytesDownloaded);
   if (job.state === "completed") {
-    return `${formatBytes(job.bytesDownloaded)} · 下载和入库完成`;
+    return `${formatBytes(job.bytesDownloaded)} · ${t("upload.doneImport")}`;
   }
   if (percent === null) {
-    return `${formatBytes(job.bytesDownloaded)} · 远程大小未知`;
+    return `${formatBytes(job.bytesDownloaded)} · ${t("upload.sizeUnknown")}`;
   }
   return `${percent.toFixed(1)}% · ${formatBytes(job.bytesDownloaded)} / ${formatBytes(job.totalBytes)}`;
 }

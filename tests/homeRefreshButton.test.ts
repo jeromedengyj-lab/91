@@ -66,7 +66,7 @@ test("home page refresh button shares back-to-top slot until back-to-top is visi
   assert.doesNotMatch(homePageSource, /loadRecentHomeVideoIds/);
   assert.doesNotMatch(homePageSource, /rememberHomeVideos/);
   assert.match(homePageSource, /className=\{`home-refresh \$\{refreshing \? "is-refreshing" : ""\}`\}/);
-  assert.match(homePageSource, /aria-label="刷新首页"/);
+  assert.match(homePageSource, /aria-label=\{t\("home\.refresh"\)\}/);
   assert.match(homePageSource, /<RefreshCw size=\{18\} \/>/);
 
   const refresh = ruleBody(layoutCss, ".home-refresh");
@@ -161,8 +161,8 @@ test("home and list pages load the shared tag cloud independently from video res
   const searchForm = ruleBody(searchCss, ".search-panel__form");
   const searchInput = ruleBody(searchCss, ".search-panel__input");
   const searchSubmit = ruleBody(searchCss, ".search-panel__submit");
-  assert.match(searchPanelSource, /placeholder = "搜索视频标题或作者"/);
-  assert.match(searchPanelSource, /placeholder=\{placeholder\}/);
+  assert.match(searchPanelSource, /resolvedPlaceholder = placeholder \?\? t\("search\.placeholder"\)/);
+  assert.match(searchPanelSource, /placeholder=\{resolvedPlaceholder\}/);
   assert.doesNotMatch(searchPanelSource, /搜索视频标题或作者\.\.\./);
   assert.match(searchPanelSource, /const SEARCH_DEBOUNCE_MS = 500;/);
   assert.match(searchPanelSource, /window\.setTimeout\(\(\) => \{\s*commitSearch\(keyword\);/);
@@ -170,10 +170,10 @@ test("home and list pages load the shared tag cloud independently from video res
   assert.match(searchPanelSource, /variant\?: "default" \| "uiverse";/);
   assert.match(searchPanelSource, /const isUiverse = variant === "uiverse";/);
   assert.match(searchPanelSource, /isUiverse \? " search-panel--uiverse" : ""/);
-  assert.match(searchPanelSource, /aria-label="清空搜索"/);
+  assert.match(searchPanelSource, /aria-label=\{t\("search\.clear"\)\}/);
   assert.match(searchPanelSource, /className=\{isUiverse \? "search-panel__uiverse-input" : "search-panel__input"\}/);
   assert.match(searchPanelSource, /className="search-panel__reset"/);
-  assert.match(searchPanelSource, /className="search-panel__uiverse-submit" type="submit" aria-label="搜索"/);
+  assert.match(searchPanelSource, /className="search-panel__uiverse-submit" type="submit" aria-label=\{t\("search\.submit"\)\}/);
   assert.match(searchPanelSource, /M7\.667 12\.667A5\.333 5\.333 0 107\.667 2a5\.333 5\.333 0 000 10\.667zM14\.334 14l-2\.9-2\.9/);
   assert.match(searchPanelSource, /className="search-panel__uiverse-submit"[\s\S]*?\{searchInput\}[\s\S]*?className="search-panel__reset"/);
   assert.doesNotMatch(searchPanelSource, /onChange=\{\(e\) => navigate/);
@@ -244,7 +244,7 @@ test("home and list pages load the shared tag cloud independently from video res
   assert.match(homePageSource, /withListingNavigation\(current, \{ sort: nextSort, page: 1 \}\)/);
   assert.match(homePageSource, /withListingView\(current, nextView\)/);
   assert.match(homePageSource, /compact=\{hasActiveFilter && searchView === "compact"\}/);
-  assert.match(homePageSource, /variant=\{hasActiveFilter \? "no-results" : "empty"\}[\s\S]*?text=\{hasActiveFilter \? "未查询到" : "当前库中没有视频"\}/);
+  assert.match(homePageSource, /variant=\{hasActiveFilter \? "no-results" : "empty"\}[\s\S]*?text=\{hasActiveFilter \? t\("home\.emptyFiltered"\) : t\("home\.empty"\)\}/);
   assert.match(homePageSource, /<VirtualVideoGrid[\s\S]*?onLoadMore=\{homeFeed\.loadMore\}/);
   assert.match(homePageSource, /const feedHasContent = feedItems\.length > 0/);
   assert.match(homePageSource, /<TagCloud linkBasePath="\/" \/>/);

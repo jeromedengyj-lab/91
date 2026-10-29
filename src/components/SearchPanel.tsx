@@ -2,6 +2,7 @@ import { memo, type FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Search } from "lucide-react";
 import { withListingNavigation } from "@/lib/listingSearchParams";
+import { useI18n } from "@/lib/i18n";
 
 const SEARCH_DEBOUNCE_MS = 500;
 
@@ -19,11 +20,13 @@ export const SearchPanel = memo(function SearchPanel({
   onSearch,
   navigationPath = "/list",
   variant = "default",
-  placeholder = "搜索视频标题或作者",
+  placeholder,
   className,
 }: SearchPanelProps = {}) {
   const isUiverse = variant === "uiverse";
   const navigate = useNavigate();
+  const { t } = useI18n();
+  const resolvedPlaceholder = placeholder ?? t("search.placeholder");
   const [params] = useSearchParams();
   const urlKeyword = params.get("q") ?? "";
   const committedKeyword = value ?? urlKeyword;
@@ -68,8 +71,8 @@ export const SearchPanel = memo(function SearchPanel({
       type="text"
       value={keyword}
       onChange={(e) => setKeyword(e.target.value)}
-      placeholder={placeholder}
-      aria-label="搜索关键词"
+      placeholder={resolvedPlaceholder}
+      aria-label={t("search.ariaKeyword")}
     />
   );
 
@@ -81,7 +84,7 @@ export const SearchPanel = memo(function SearchPanel({
     >
       {isUiverse ? (
         <>
-          <button className="search-panel__uiverse-submit" type="submit" aria-label="搜索">
+          <button className="search-panel__uiverse-submit" type="submit" aria-label={t("search.submit")}>
             <svg
               width="17"
               height="16"
@@ -103,7 +106,7 @@ export const SearchPanel = memo(function SearchPanel({
             className="search-panel__reset"
             type="button"
             onClick={handleReset}
-            aria-label="清空搜索"
+            aria-label={t("search.clear")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -127,9 +130,9 @@ export const SearchPanel = memo(function SearchPanel({
             <Search size={16} className="search-panel__search-icon" aria-hidden="true" />
             {searchInput}
           </div>
-          <button className="search-panel__submit" type="submit" aria-label="搜索">
+          <button className="search-panel__submit" type="submit" aria-label={t("search.submit")}>
             <Search size={16} className="search-panel__submit-icon" aria-hidden="true" />
-            <span className="search-panel__submit-text">搜索</span>
+            <span className="search-panel__submit-text">{t("search.submit")}</span>
           </button>
         </div>
       )}

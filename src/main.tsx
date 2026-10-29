@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router";
 import App from "./App";
 import { ToastProvider } from "./admin/ToastContext";
 import { AuthProvider } from "./admin/AuthContext";
+import { I18nProvider } from "./lib/i18n";
 import { syncThemeFromServer } from "./lib/theme";
 import { initializeListingScrollRestore } from "./lib/listingScrollRestore";
 import { initializeControlFocus } from "./lib/controlFocus";
@@ -29,7 +30,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ToastProvider>
         <AuthProvider>
-          <App />
+          <I18nProvider>
+            <App />
+          </I18nProvider>
         </AuthProvider>
       </ToastProvider>
     </BrowserRouter>

@@ -19,7 +19,7 @@ function ruleBody(css: string, selector: string): string {
 }
 
 test("upload page supports local files and persistent remote-link jobs", () => {
-  assert.match(uploadPageSource, /<SectionHeader title="上传视频" \/>/);
+  assert.match(uploadPageSource, /<SectionHeader title=\{t\("upload\.title"\)\} \/>/);
   assert.match(uploadPageSource, /本地文件/);
   assert.match(uploadPageSource, /视频直链/);
   assert.match(uploadPageSource, /createRemoteUpload/);
@@ -65,7 +65,7 @@ test("upload page supports local files and persistent remote-link jobs", () => {
 test("remote upload task list has progress, cancellation, and mobile layout", () => {
   assert.match(uploadPageSource, /role="progressbar"/);
   assert.match(uploadPageSource, /job\.totalBytes > 0/);
-  assert.match(uploadPageSource, /远程大小未知/);
+  assert.match(uploadPageSource, /t\("upload\.sizeUnknown"\)/);
   assert.match(uploadPageSource, /job\.canCancel/);
   assert.match(uploadPageSource, /job\.videoHref/);
   assert.match(layoutCss, /\.remote-upload-progress\s*\{/);
